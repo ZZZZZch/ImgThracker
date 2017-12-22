@@ -7,19 +7,32 @@ import time
 import threading
 
 
-
 class myThread(threading.Thread):
     def __init__(self, threadID, name):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
         # self.k = k
+
     def run(self):
         print("开启线程..")
         show_camera()
         print("结束线程..")
 
+
 def show_camera():
+    match_dic = {}
+
+    for pic_name in os.listdir(path_name)[1:]:
+        pic_name = path_name + pic_name
+        if os.path.isdir(pic_name):
+            continue
+        img_pic = cv2.imread(pic_name)
+        height, width, _ = img_pic.shape
+        img_width = width * img_height // height
+        img_pic = cv2.resize(src=img_pic, dsize=(img_width, img_height))
+        kp_pic, desc_pic = detector.detectAndCompute(img_pic, None)
+        match_dic[pic_name] = (kp_pic, desc_pic)
 
     while True:
 
@@ -42,13 +55,7 @@ def show_camera():
             pic_name = path_name + pic_name
             if os.path.isdir(pic_name):
                 continue
-            img_pic = cv2.imread(pic_name)
-            height, width, _ = img_pic.shape
-            img_width = width * img_height // height
-            img_pic = cv2.resize(src=img_pic, dsize=(img_width, img_height))
-            kp_pic, desc_pic = detector.detectAndCompute(img_pic, None)
-
-            
+            kp_pic, desc_pic = match_dic[pic_name]
 
             raw_matches = matcher.knnMatch(desc_pic, trainDescriptors=desc_frame, k=2)
             p1, p2, kp_pairs = filter_matches(kp_pic, kp_frame, raw_matches, 0.5)
@@ -136,6 +143,7 @@ def filter_matches(kp1, kp2, matches, ratio=0.75):
     p2 = np.float32([kp[1].pt for kp in kp_pairs])
     return p1, p2, kp_pairs
 
+
 if __name__ == '__main__':
     cv2.ocl.setUseOpenCL(False)
     path_name = './img/'
@@ -154,7 +162,7 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
     cv2.namedWindow(winName)
 
-    thread1 = myThread(1,"Thread-1")
+    thread1 = myThread(1, "Thread-1")
     thread1.start()
 
     print('Start..')
@@ -182,7 +190,6 @@ if __name__ == '__main__':
 
         cv2.imshow(winName, vis)
         cv2.waitKey(1)
-
 
         if cv2.waitKey(1) & 0xFF == 27:
             os.remove("Present.jpg")
