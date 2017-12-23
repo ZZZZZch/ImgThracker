@@ -14,4 +14,5 @@
 
   - python3 ImgThracker.py
 
-  ​
+## 技术介绍
+- 参见个人博客：https://zzzzzch.github.io/
