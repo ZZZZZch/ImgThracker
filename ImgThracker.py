@@ -16,11 +16,11 @@ class myThread(threading.Thread):
 
     def run(self):
         print("开启线程..")
-        show_camera()
+        find_result()
         print("结束线程..")
 
 
-def show_camera():
+def find_result():
 
     match_dic = {}
     for pic_name in os.listdir(path_name)[1:]:
@@ -144,10 +144,7 @@ def filter_matches(kp1, kp2, matches, ratio=0.75):
     return p1, p2, kp_pairs
 
 
-if __name__ == '__main__':
-    path_name = './img/'
-    winName = 'Detector'
-    file_name, object_name = './img/1.jpeg', 'A'
+def base_part(file_name):
     img1 = cv2.imread(file_name)
     height, width, _ = img1.shape
     print(width, height)
@@ -158,10 +155,10 @@ if __name__ == '__main__':
     detector, matcher = init_feature()
     kp1, desc1 = detector.detectAndCompute(img1, None)
 
+    return (kp1, desc1, img_height, detector, matcher)
 
-    cap = cv2.VideoCapture(0)
-    cv2.namedWindow(winName)
 
+def compare_show_part(kp1, desc1, img_height, detector, matcher):
     thread1 = myThread(1, "Thread-1")
     thread1.start()
 
@@ -196,6 +193,24 @@ if __name__ == '__main__':
                 os.remove("Present.jpg")
             break
 
+
+if __name__ == '__main__':
+    path_name = './img/'
+    winName = 'Detector'
+    file_name, object_name = './img/1.jpeg', 'A'
+
+    cap = cv2.VideoCapture(0)
+    cv2.namedWindow(winName)
+
+    kp1, desc1, img_height, detector, matcher = base_part(file_name)
+
+    compare_show_part(kp1, desc1, img_height, detector, matcher)
+
     cap.release()
     cv2.destroyAllWindows()
-    print("finish")
+
+    print("Finish")
+
+
+
+
