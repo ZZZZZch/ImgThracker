@@ -82,7 +82,7 @@ if __name__ == '__main__':
     detector, matcher = init_feature()
     kp1, desc1 = detector.detectAndCompute(img1, None)
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("./test.m4v")
     cv2.namedWindow(winName)
 
     first_pic = cv2.imread("0.jpeg")
