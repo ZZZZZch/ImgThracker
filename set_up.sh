@@ -3,11 +3,11 @@
 # Shell script set_up.sh
 # Set up opencv-contrib
 
-#yes|yum install python34 python34-setuptools wget
-#yes|easy_install-3.4 pip
+yes|yum install python34 python34-setuptools wget
+yes|easy_install-3.4 pip
 
-wget https://pypi.python.org/packages/98/2c/cc7f2268ef5a276153e320f070db5f96afded0d99e9b957558c68d6abbec/opencv_contrib_python-3.4.0.12-cp27-cp27m-manylinux1_x86_64.whl#md5=879fafbed3e2da442e44d373976488f2
-pip install opencv_contrib_python-3.4.0.12-cp27-cp27m-manylinux1_x86_64.whl
+wget https://pypi.python.org/packages/5e/01/d482c01255bd2f742637bc83a93384d17bb595e5065b43e7665414850897/opencv_contrib_python-3.4.0.12-cp34-cp34m-manylinux1_x86_64.whl#md5=ae97bd49db3c28cc76e0d2c0ddd267e2
+pip3 install opencv_contrib_python-3.4.0.12-cp34-cp34m-manylinux1_x86_64.whl
 
-pip install numpy scipy
+pip3 install numpy scipy
 
